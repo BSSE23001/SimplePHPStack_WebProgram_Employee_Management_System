@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Add Record</title>
+    <link href="../css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+<script src="../js/bootstrap.bundle.min.js"></script>
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="#">
+            <img src="../assets/logo.png" alt="Logo" width="30" class="d-inline-block align-text-top me-2">
+            EMS
+        </a>
+        <!-- Toggle button for mobile -->
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <!-- Collapsible navigation items -->
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="index.html">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="add.html">Add Record</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="list.html">View Records</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<!-- ADDER Form -->
+<div class="container mt-5">
+    <h2>Add Employee Record</h2>
+    <form id="recordForm">
+        <div class="mb-3">
+            <label for="employeeName" class="form-label">Employee Name</label>
+            <input type="text" class="form-control" id="employeeName" required>
+        </div>
+        <div class="mb-3">
+            <label for="recordDate" class="form-label">Date</label>
+            <input type="date" class="form-control" id="recordDate" required>
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Mark Attendance</label>
+            <select class="form-control" id="attendance">
+                <option value="Present">Present</option>
+                <option value="Leave">Leave</option>
+            </select>
+        </div>
+        <div class="mb-3">
+            <label for="reason" class="form-label">Reason (if leave)</label>
+            <input type="text" class="form-control" id="reason">
+        </div>
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+</div>
+
+<!--JS SCRIPT IS TO ACT AS A LINK BETWEEN FRONTEND AND MINIMAL BACKED (SOMEWHAT API)-->
+<script>
+    document.getElementById('recordForm').addEventListener('submit', async function(e) {
+        e.preventDefault();
+        // CREATING A FORMDATA OBJECT
+        const formData = {
+            name: document.getElementById('employeeName').value,
+            date: document.getElementById('recordDate').value,
+            attendance: document.getElementById('attendance').value,
+            reason: document.getElementById('reason').value
+        };
+        // USING FETCH FUNCTION TO SEND DATA TO PHP
+        const res = await fetch('../php/add_record.php', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify(formData)
+        });
+        // GET THE RESPONSE MESSAGE
+        const msg = await res.text();
+        alert(msg);
+        this.reset();
+    });
+</script>
+</body>
+</html>

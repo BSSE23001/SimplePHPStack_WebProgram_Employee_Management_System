@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>View Records</title>
+    <link href="../css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+<script src="../js/bootstrap.bundle.min.js"></script>
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="#">
+            <img src="../assets/logo.png" alt="Logo" width="30" class="d-inline-block align-text-top me-2">
+            EMS
+        </a>
+        <!-- Toggle button for mobile -->
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <!-- Collapsible navigation items -->
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="index.html">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="add.html">Add Record</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="list.html">View Records</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+<!--DATA IN TABLE FORMAT, THIS IS DEFINING STRUCTURE OF HOW DATA WILL BE SHOWN OR INSERTED-->
+<div class="container mt-5">
+    <h2>Employee Records</h2>
+    <table class="table table-striped" id="recordsTable">
+        <thead>
+        <tr>
+            <th>#</th>
+            <th>Name</th>
+            <th>Date</th>
+            <th>Attendance</th>
+            <th>Reason</th>
+        </tr>
+        </thead>
+        <tbody>
+        <!--DATA WILL BE INSERTED IN THIS BODY-->
+        </tbody>
+    </table>
+</div>
+
+<!--JS SCRIPT TO GET DATA FROM THE PHP FILE AND UPDATE THE FRONTEND-->
+<script>
+    // THIS FUNCTION WILL RUN ON THE FIRST OR EVERY RELOAD OF THE PAGE
+    window.onload = async function () {
+        const response = await fetch('../php/get_records.php');
+        // GETTING DATA IN JSON FORMAT
+        const data = await response.json();
+        // NOW GETTING THE TABLE BODY WHERE DATA IS TO BE INSERTED
+        const tbody = document.querySelector('#recordsTable tbody');
+        // USING FOR EACH FUNCTION TO MAP JSON OBJECT TO THE HTML STRUCTURED DATA
+        data.forEach((record, i) => {
+            const row = `<tr>
+          <td>${i + 1}</td>
+          <td>${record.name}</td>
+          <td>${record.date}</td>
+          <td>${record.attendance}</td>
+          <td>${record.reason || '-'}</td>
+        </tr>`;
+            tbody.innerHTML += row; // ADDING THE COMPLETE ROW
+        });
+    };
+</script>
+</body>
+</html>
